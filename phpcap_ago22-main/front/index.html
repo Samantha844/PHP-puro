@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/principal.css" rel="stylesheet">
+
+    <title>API de agente de contactos</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="alert alert-info">Agenda telefonica</div>
+        </div>
+
+        <div class="row" id="seccion_mensajes_sistema" style="display: none;">
+            <div class="alert alert-danger" id="div_mensasjes_sistema"></div>
+        </div>
+
+        <!-- seccion de filtro y resultados -->
+        <div id="seccion_filtro_tablero">
+            <div class="row">
+                <div class="col-12">
+                    <fieldset>
+                        <legend>Filtro de contactos</legend>
+                        <form id="form_busqueda_contacto" method="post">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Nombre">
+                                </div>
+                                <div class="col-lg-3 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Apellido paterno">
+                                </div>
+                                <div class="col-lg-3 col-sm-6 col-xs-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="genero_buscar" id="genero_h">
+                                        <label class="form-check-label" for="genero_h">
+                                        Masculino
+                                    </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6 col-xs-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="genero_buscar" id="genero_f">
+                                        <label class="form-check-label" for="genero_f">
+                                        Femenino
+                                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 derecha">
+                                    <button id="btn_buscar_empleado_seccion" type="button" class="btn btn-outline-success btn-sm">Buscar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <fieldset>
+                        <legend>Tablero de resultados</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-12 derecha">
+                            <button id="btn_agregar_contacto" type="button" class="btn btn-sm btn-outline-primary">Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Cumpleaños</th>
+                                    <th>Datos de contacto</th>
+                                    <th>Operaciones</th>
+                                </thead>
+                                <tbody id="tbodyResultadosEmpleado"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- seccion de registro -->
+        <div id="seccion_formulario" style="display: none">
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <form id="form_registro_contacto" method="post">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nombre_form">Nombre</label>
+                                <input type="text" id="nombre_form" name="nombre" class="form-control" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="paterno_form">Apellido Paterno</label>
+                                <input type="text" id="paterno_form" name="paterno" class="form-control" placeholder="Paterno">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="materno_form">Apellido Materno</label>
+                                <input type="text" id="materno_form" name="materno" class="form-control" placeholder="Materno">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nacimiento_form">Fecha de nacimiento</label>
+                                <input type="date" id="nacimiento_form" name="nacimiento" class="form-control" placeholder="Fecha de nacimiento">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="domicilio_form">Domicilio</label>
+                                <input type="text" id="domicilio_form" name="domicilio" class="form-control" placeholder="Domicilio">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="genero" id="genero_h_form" value="h">
+                                    <label class="form-check-label" for="genero_h">
+                                        Masculino
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="genero" id="genero_f_form" value="m">
+                                    <label class="form-check-label" for="genero_f">
+                                        Femenino
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 centrado">
+                                <button type="button" id="btn_guardar_empleado_seccion" class="btn btn-sm btn-outline-success">Guardar</button>
+                                <button type="button" id="btn_cancelar_empleado_seccion" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- seccion modal de registro de contacto -->
+    <div class="modal" id="modal_registro_contacto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Formulario de contacto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_registro_contacto_modal">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nombre_form">Nombre</label>
+                                <input type="text" id="nombre_form_modal" name="nombre" class="form-control" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="paterno_form">Apellido Paterno</label>
+                                <input type="text" id="paterno_form_modal" name="paterno" class="form-control" placeholder="Paterno">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btn_modificar_empleado" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- seccion de actualizar -->
+      <div id="actualizar" style="display: none">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <form id="form_registro_contacto" method="post">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="nombre_form">Nombre</label>
+                            <input type="text" id="nombre_form" name="nombre" class="form-control" placeholder="Nombre">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="paterno_form">Apellido Paterno</label>
+                            <input type="text" id="paterno_form" name="paterno" class="form-control" placeholder="Paterno">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="materno_form">Apellido Materno</label>
+                            <input type="text" id="materno_form" name="materno" class="form-control" placeholder="Materno">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="nacimiento_form">Fecha de nacimiento</label>
+                            <input type="date" id="nacimiento_form" name="nacimiento" class="form-control" placeholder="Fecha de nacimiento">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="domicilio_form">Domicilio</label>
+                            <input type="text" id="domicilio_form" name="domicilio" class="form-control" placeholder="Domicilio">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="genero" id="genero_h_form" value="h">
+                                <label class="form-check-label" for="genero_h">
+                                    Masculino
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="genero" id="genero_f_form" value="m">
+                                <label class="form-check-label" for="genero_f">
+                                    Femenino
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 centrado">
+                            <button type="button" id="btn_actualizar_empleado" class="btn btn-sm btn-outline-success">Guardar</button>
+                            <button type="button" id="btn_cancelar_empleado_seccion" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+
+    <!-- seccion datos de contacto -->
+    <div id="seccion_contacto" style="display: none">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <form id="form_registro_datos" method="post">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="correo_form">Correo</label>
+                            <input type="text" id="correo_form" name="correo" class="form-control" placeholder="Correo">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="telefono_form">Telefono</label>
+                            <input type="text" id="telefono_form" name="telefono" class="form-control" placeholder="Telefono">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="celular_form">Celular</label>
+                            <input type="text" id="celular_form" name="celular" class="form-control" placeholder="Celular">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="facebook_form">Facebook</label>
+                            <input type="date" id="facebook_form" name="facebook" class="form-control" placeholder="Facebook">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="linkedin_form">Linkedin</label>
+                            <input type="text" id="linkedin_form" name="linkedin" class="form-control" placeholder="Linkedin">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 centrado">
+                            <button type="button" id="btn_guardar_contacto_seccion" class="btn btn-sm btn-outline-success">Guardar</button>
+                            <button type="button" id="btn_cancelar_empleado_seccion" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+    <!-- integracion de JS necesarios -->
+    <script src="js/lib/jquery-3.6.0.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/variables.js"></script>
+    <script src="js/agenda.js"></script>
+</body>
+
+</html>
